@@ -12,7 +12,6 @@ last_year <- as.numeric(substr(Sys.time(), 1, 4)) - 1
 
 get_asos <- function(station) {
   url <- "http://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?"
-  if(!(url.exists(url))) stop("Can't access `weather` link in 'data-raw/weather.R'")
   query <- list(
     station = station, data = "all",
     year1 = as.character(last_year), month1 = "1", day1 = "1",
@@ -49,31 +48,31 @@ raw <- bind_rows(all)
 names(raw) <- c("origin", "valid", "tmpf", "dwpf", "relh", "drct", "sknt",
                 "p01i", "alti", "mslp", "vsby", "gust",
                 "skyc1", "skyc2", "skyc3", "skyc4",
-                "skyl1", "skyl2", "skyl3", "skyl4", "wxcodes", "metar")
+                "skyl1", "skyl2", "skyl3", "skyl4", "wxcodes", "metar",
+                paste0("V", 1:8))
 
 weather <-
   raw %>%
-  rename_(time = ~valid) %>%
-  select_(
-    ~origin, ~time, temp = ~tmpf, dewp = ~dwpf, humid = ~relh,
-    wind_dir = ~drct, wind_speed = ~sknt, wind_gust = ~gust,
-    precip = ~p01i, pressure = ~mslp, visib = ~vsby
+  rename(time = valid) %>%
+  select(
+    origin, time, temp = tmpf, dewp = dwpf, humid = relh,
+    wind_dir = drct, wind_speed = sknt, wind_gust = gust,
+    precip = p01i, pressure = mslp, visib = vsby
   ) %>%
-  mutate_(
-    time = ~as.POSIXct(strptime(time, "%Y-%m-%d %H:%M")),
-    wind_speed = ~as.numeric(wind_speed) * 1.15078, # convert to mpg
-    wind_gust = ~as.numeric(wind_speed) * 1.15078,
+  mutate(
+    time = as.POSIXct(strptime(time, "%Y-%m-%d %H:%M")),
+    wind_speed = as.numeric(wind_speed) * 1.15078, # convert to mpg
+    wind_gust = as.numeric(wind_speed) * 1.15078,
     year = last_year,
-    month = ~lubridate::month(time),
-    day = ~lubridate::mday(time),
-    hour = ~lubridate::hour(time)) %>%
-  group_by_(~origin, ~month, ~day, ~hour) %>%
-  filter_(~ row_number() == 1) %>%
-  select_(~origin, ~year:hour, ~temp:visib) %>%
+    month = lubridate::month(time),
+    day = lubridate::mday(time),
+    hour = lubridate::hour(time)) %>%
+  group_by(origin, month, day, hour) %>%
+  filter(row_number() == 1) %>%
+  select(origin, year:hour, temp:visib) %>%
   ungroup() %>%
-  filter_(~!is.na(month)) %>%
-  mutate_(
-    time_hour = ~ISOdatetime(year, month, day, hour, 0, 0))
+  filter(!is.na(month)) %>%
+  mutate(time_hour = ISOdatetime(year, month, day, hour, 0, 0))
 
 write_csv(weather, "data-raw/weather.csv")
 save(weather, file = "data/weather.rda", compress = "xz")
