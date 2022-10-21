@@ -6,7 +6,7 @@ last_year <- as.numeric(substr(Sys.time(), 1, 4)) - 1
 
 # Update URL from
 # http://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download/
-src <- "https://registry.faa.gov/database/ReleasableAircraft.zip"
+src <- paste0("https://registry.faa.gov/database/yearly/ReleasableAircraft.", last_year, ".zip")
 lcl <- "data-raw/planes"
 
 if (!file.exists(lcl)) {
@@ -24,8 +24,10 @@ keep <- master %>%
   as_tibble() %>%
   select(nnum = n.number, code = mfr.mdl.code, year = year.mfr)
 
-ref <- read.csv("data-raw/planes//ACFTREF.txt", stringsAsFactors = FALSE,
-  strip.white = TRUE)
+ref <- read.csv("data-raw/planes/ACFTREF.txt",
+                stringsAsFactors = FALSE,
+                strip.white = TRUE
+)
 names(ref) <- tolower(names(ref))
 
 ref <- ref %>%
