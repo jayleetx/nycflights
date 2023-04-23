@@ -19,4 +19,4 @@ Suggests:
     dplyr
 URL: http://github.com/jayleetx/nycflights
 BugReports: https://github.com/jayleetx/nycflights/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 7.2.3

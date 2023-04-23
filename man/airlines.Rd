@@ -4,11 +4,13 @@
 \name{airlines}
 \alias{airlines}
 \title{Airline names.}
-\format{A data frame with 12 rows and 2 variables:
+\format{
+A data frame with 12 rows and 2 variables:
 \describe{
 \item{carrier}{Two letter abbreviation}
 \item{name}{Full name}
-}}
+}
+}
 \source{
 http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236
 }

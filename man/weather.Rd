@@ -4,7 +4,8 @@
 \name{weather}
 \alias{weather}
 \title{Hourly weather data}
-\format{A data frame with 26201 rows and 15 variables:
+\format{
+A data frame with 26201 rows and 15 variables:
 \describe{
 \item{origin}{Weather station. Named origin to facilitate merging with
   \code{\link{flights}} data}
@@ -17,7 +18,8 @@
 \item{pressure}{Sea level pressure in millibars}
 \item{visib}{Visibility in miles}
 \item{time_hour}{Date and hour of the recording as a \code{POSIXct} date}
-}}
+}
+}
 \source{
 ASOS download from Iowa Environmental Mesonet,
   https://mesonet.agron.iastate.edu/request/download.phtml.

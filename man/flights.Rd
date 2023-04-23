@@ -4,7 +4,8 @@
 \name{flights}
 \alias{flights}
 \title{Flights data}
-\format{A data frame with 303748 rows and 19 variables:
+\format{
+A data frame with 303748 rows and 19 variables:
 \describe{
 \item{year,month,day}{Date of departure}
 \item{dep_time,arr_time}{Actual departure and arrival times, local tz.}
@@ -22,7 +23,8 @@
 \item{distance}{Distance between airports, in miles}
 \item{time_hour}{Scheduled date and hour of the flight as a \code{POSIXct} date.
   Along with \code{origin}, can be used to join flights data to weather data.}
-}}
+}
+}
 \source{
 RITA, Bureau of transportation statistics,
  \url{http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236}
