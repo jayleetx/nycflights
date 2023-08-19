@@ -1,8 +1,9 @@
 library(dplyr)
 library(readr)
+library(RCurl)
 
-if (url.exists("http://www.transtats.bts.gov/Download_Lookup.asp?Lookup=L_UNIQUE_CARRIERS")) {
-  raw <- read_csv("http://www.transtats.bts.gov/Download_Lookup.asp?Lookup=L_UNIQUE_CARRIERS")
+if (url.exists("https://www.transtats.bts.gov/Download_Lookup.asp?Y11x72=Y_haVdhR_PNeeVRef")) {
+  raw <- read_csv("https://www.transtats.bts.gov/Download_Lookup.asp?Y11x72=Y_haVdhR_PNeeVRef")
 } else stop("Can't access `airlines` link in 'data-raw/airlines.R'")
 
 

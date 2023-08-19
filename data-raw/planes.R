@@ -1,19 +1,17 @@
 library(dplyr)
 library(readr)
+library(RCurl)
 
 last_year <- as.numeric(substr(Sys.time(), 1, 4)) - 1
 
 # Update URL from
 # http://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download/
-src <- paste0("http://registry.faa.gov/database/yearly/ReleasableAircraft.", last_year, ".zip")
+src <- paste0("https://registry.faa.gov/database/yearly/ReleasableAircraft.", last_year, ".zip")
 lcl <- "data-raw/planes"
 
 if (!file.exists(lcl)) {
-  if (url.exists(src)) {
-    tmp <- tempfile(fileext = ".zip")
-    download.file(src, tmp)
-  } else stop("Can't access `planes` link in 'data-raw/planes.R'")
-
+  tmp <- tempfile(fileext = ".zip")
+  download.file(src, tmp)
 
   dir.create(lcl)
   unzip(tmp, exdir = lcl, junkpaths = TRUE)
@@ -23,15 +21,17 @@ master <- read.csv("data-raw/planes/MASTER.txt", stringsAsFactors = FALSE, strip
 names(master) <- tolower(names(master))
 
 keep <- master %>%
-  tbl_df() %>%
+  as_tibble() %>%
   select(nnum = n.number, code = mfr.mdl.code, year = year.mfr)
 
-ref <- read.csv("data-raw/planes//ACFTREF.txt", stringsAsFactors = FALSE,
-  strip.white = TRUE)
+ref <- read.csv("data-raw/planes/ACFTREF.txt",
+                stringsAsFactors = FALSE,
+                strip.white = TRUE
+)
 names(ref) <- tolower(names(ref))
 
 ref <- ref %>%
-  tbl_df() %>%
+  as_tibble() %>%
   select(code, mfr, model, type.acft, type.eng, no.eng, no.seats, speed)
 
 # Combine together
